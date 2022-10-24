@@ -1,16 +1,19 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"mock"
+)
 
-type Retiever interface {
+type Retriever interface {
 	Get(url string) string
 }
 
-func download(r Retiever) string {
+func download(r Retriever) string {
 	return r.Get("www.baidu.com")
 }
 
 func main() {
-	var r Retiever
+	r := mock.Retriever{Contents: "test"}
 	fmt.Println(download(r))
 }
