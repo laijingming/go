@@ -32,21 +32,37 @@ func session(pr PosterRetriever) string {
 func inspect(r Retriever) {
 	switch v := r.(type) {
 	case *mock.Retriever:
-		fmt.Println(v)
+		fmt.Println("mock.Retriever：", v)
 	case real2.Retriever:
-		fmt.Printf("UserAgent:%s\n", v.UserAgent)
+		fmt.Printf("real2.Retriever：UserAgent:%s\n", v.UserAgent)
 	default:
 		fmt.Println("default：", v)
 		return
 	}
 }
 
+type person struct {
+	name string
+	age  int
+}
+
+func (p person) String() string {
+	return fmt.Sprintf("name：%s,age：%d", p.name, p.age)
+}
+
 func main() {
-	mockRetriever := &mock.Retriever{Contents: "Mozilla/5.0"}
-	inspect(mockRetriever)
-	fmt.Println("download：", download(mockRetriever))
-	fmt.Println("session：", session(mockRetriever))
-	inspect(mockRetriever)
+	p := person{
+		name: "张胜男",
+		age:  0,
+	}
+	fmt.Println(p)
+
+	//mockRetriever := &mock.Retriever{Contents: "Mozilla/5.0"}
+	//inspect(mockRetriever)
+	//fmt.Println("download：", download(mockRetriever))
+	//fmt.Println("session：", session(mockRetriever))
+	//inspect(mockRetriever)
+
 	//var r Retriever
 	//r = real2.Retriever{
 	//	UserAgent: "Mozilla/5.0",
