@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	tree "tree/functional"
 )
 
@@ -11,12 +12,12 @@ func main() {
 	t.Right = &tree.TN{Value: 5}
 	t.Right.Left = &tree.TN{Value: 4}
 	t.Left.Right = &tree.TN{Value: 22}
-	t.Traverse()
-	//tCount := 0
-	//t.TraverseFunc(func(tn *tree.TN) {ss
-	//	tCount++ｓ
-	//})
-	//fmt.Printf("t count:%d", tCount)
+	//t.Traverse()
+	tCount := 0
+	t.TraverseFunc(func(tn *tree.TN) {
+		tCount++
+	})
+	fmt.Printf("t count:%d", tCount)
 	////var mt myTreeNode
 	////mt.node = &t
 	////mt.MyTraverse()

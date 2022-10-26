@@ -3,8 +3,8 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"functional/fib"
 	"os"
-	"study/functional/fib"
 )
 
 func tryDefer() {

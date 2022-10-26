@@ -20,5 +20,7 @@ func tryRecover() {
 }
 
 func main() {
+	defer fmt.Println("第一")
+	defer fmt.Println("第二")
 	tryRecover()
 }

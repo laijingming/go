@@ -1,11 +1,11 @@
 package main
 
 import (
+	"errorhandling/filelistingserver/global"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"strings"
-	"study/errorhandling/filelistingserver/global"
 	"testing"
 )
 

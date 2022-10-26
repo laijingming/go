@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-/*斐波那契数列*/
+// Fibonacci 斐波那契数列
 func Fibonacci() IntGen {
 	pre, nex := 0, 1
 	return func() int {

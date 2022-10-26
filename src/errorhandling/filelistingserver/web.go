@@ -1,10 +1,10 @@
 package main
 
 import (
+	"errorhandling/filelistingserver/filelisting"
+	"errorhandling/filelistingserver/global"
 	"net/http"
 	_ "net/http/pprof"
-	"study/errorhandling/filelistingserver/filelisting"
-	"study/errorhandling/filelistingserver/global"
 )
 
 // todo:做一个显示文件的server

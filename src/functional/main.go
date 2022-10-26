@@ -3,8 +3,8 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"functional/fib"
 	"io"
-	"study/functional/fib"
 )
 
 /*读内容*/
