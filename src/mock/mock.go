@@ -12,7 +12,7 @@ func (r *Retriever) String() string {
 }
 
 func (r *Retriever) Get(url string) string {
-	return r.Contents
+	return r.Contents + "_" + url
 }
 func (r *Retriever) Post(url string, form map[string]string) string {
 	r.Contents = url
