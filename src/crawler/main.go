@@ -1,9 +1,9 @@
 package main
 
 import (
+	"crawler/engine"
+	"crawler/zhenai"
 	_ "golang.org/x/text/encoding/simplifiedchinese"
-	"study/crawler/engine"
-	"study/crawler/zhenai"
 )
 
 func main() {

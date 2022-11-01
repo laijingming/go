@@ -40,6 +40,49 @@ func bufferedChannel() {
 }
 
 func main() {
-	chanDemo()
+	chanDemo2()
 	//bufferedChannel()
+}
+
+func chanDemo2() {
+	var workers [10]work
+	for i := 0; i < 10; i++ {
+		workers[i] = createWorker2(i)
+	}
+	for i, work := range workers {
+		work.in <- 'a' + i
+	}
+	for i, work := range workers {
+		work.in <- 'a' + i
+	}
+	//wait for all of them
+	for _, work := range workers { //每个worker发了俩边，因此这边需要接收俩次
+		<-work.do //done直接输出成功，说明chan.in接收完了
+		<-work.do //done直接输出成功，说明chan.in接收完了
+	}
+}
+
+type work struct {
+	in chan int
+	do chan bool
+}
+
+//创建一个worker
+func createWorker2(id int) work {
+	w := work{
+		in: make(chan int),
+		do: make(chan bool),
+	}
+	go worker2(id, w)
+	return w
+}
+
+//worker
+func worker2(id int, w work) {
+	for n := range w.in {
+		fmt.Println("worker：", id, "，received：", n)
+		go func() { //发消息，没有接收会造成堵塞，因此单独开一个协程
+			w.do <- true
+		}()
+	}
 }

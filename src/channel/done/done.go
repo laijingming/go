@@ -49,6 +49,45 @@ func chanDemo() {
 }
 
 func main() {
-	chanDemo()
+	chanDemo2()
 	//bufferedChannel()
+}
+
+func chanDemo2() {
+	var workers [10]work2
+	var wg sync.WaitGroup
+	wg.Add(20)
+	for i := 0; i < 10; i++ {
+		workers[i] = createWorker2(i, &wg)
+	}
+	for i, work := range workers {
+		work.in <- 'a' + i
+	}
+	for i, work := range workers {
+		work.in <- 'a' + i
+	}
+	wg.Wait()
+}
+
+type work2 struct {
+	in chan int
+	wg *sync.WaitGroup
+}
+
+//创建一个worker
+func createWorker2(id int, wg *sync.WaitGroup) work2 {
+	w := work2{
+		in: make(chan int),
+		wg: wg,
+	}
+	go worker2(id, w)
+	return w
+}
+
+//worker
+func worker2(id int, w work2) {
+	for n := range w.in {
+		fmt.Println("worker：", id, "，received：", n)
+		w.wg.Done()
+	}
 }
