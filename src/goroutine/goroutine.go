@@ -2,20 +2,19 @@ package main
 
 import (
 	"fmt"
-	"time"
 )
 
 func main() {
-	//var a [20]int
-	for i := 0; i < 1000; i++ {
-		go func(i int) {
+	a := make(map[int]int)
+	for i := 0; i < 10; i++ {
+		go func(i int) { //与main并发执行
 			for {
 				fmt.Printf("hello from goroutine %d\n", i)
-				//a[i]++
+				a[i]++
 				//runtime.Gosched()
 			}
 		}(i)
 	}
-	time.Sleep(time.Minute)
-	//fmt.Println(a)
+	//time.Sleep(time.Second)//不加sleep可能goroutine还没执行main就已经结束
+	fmt.Println(a)
 }

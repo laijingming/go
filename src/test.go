@@ -50,7 +50,7 @@ func session(rp RetrieverPoster) string {
 func main() {
 	//r := mock.Retriever{"another fake"}
 	//fmt.Println(session(&r))
-	//	printFile("base.txt")
+	//printFile("./src/base.txt")
 	//	s:=`s"abc"
 	//1
 	//在jam沙`

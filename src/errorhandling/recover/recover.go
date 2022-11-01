@@ -8,7 +8,7 @@ func tryRecover() {
 	defer func() {
 		r := recover()
 		if err, ok := r.(error); ok {
-			fmt.Println(err)
+			fmt.Println(err.Error())
 		} else {
 			panic(r)
 		}
