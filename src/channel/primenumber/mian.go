@@ -22,20 +22,21 @@ func compute(start int, end int, c chan int) {
 	}
 }
 
-func write(id int, c chan int) {
-	for {
-		for s := range c {
+func write(id int) chan int {
+	work := make(chan int)
+	go func() {
+		for s := range work {
 			fmt.Println("id:", id, "-", s)
 		}
-	}
+	}()
+	return work
 }
 
 func main() {
+	var workers [4]chan int
 	num := 2
-	for i := 0; i < 4; i++ {
-		work := make(chan int)
-		go write(i, work)
-		go compute(num, num+2000, work)
+	for i, _ := range workers {
+		go compute(num, num+2000, write(i))
 		num += 2000
 	}
 	time.Sleep(time.Second)
