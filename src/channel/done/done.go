@@ -70,15 +70,17 @@ func chanDemo2() {
 }
 
 type work2 struct {
-	in chan int
-	wg *sync.WaitGroup
+	in   chan int
+	done func()
 }
 
 //创建一个worker
 func createWorker2(id int, wg *sync.WaitGroup) work2 {
 	w := work2{
 		in: make(chan int),
-		wg: wg,
+		done: func() {
+			wg.Done()
+		},
 	}
 	go worker2(id, w)
 	return w
@@ -88,6 +90,6 @@ func createWorker2(id int, wg *sync.WaitGroup) work2 {
 func worker2(id int, w work2) {
 	for n := range w.in {
 		fmt.Println("worker：", id, "，received：", n)
-		w.wg.Done()
+		w.done()
 	}
 }

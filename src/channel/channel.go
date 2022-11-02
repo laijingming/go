@@ -40,7 +40,18 @@ func bufferedChannel() {
 }
 
 func main() {
-	chanDemo2()
+	c := make(chan int, 10)
+	fmt.Printf("c=%v,地址=%p", c, &c)
+
+	for i := 0; i < 10; i++ {
+		c <- i
+	}
+	close(c)
+	for s := range c {
+		fmt.Println(s)
+	}
+	time.Sleep(time.Microsecond)
+	//chanDemo2()
 	//bufferedChannel()
 }
 

@@ -13,23 +13,23 @@ func main() {
 	t.Right.Left = &tree.TN{Value: 4}
 	t.Left.Right = &tree.TN{Value: 22}
 	//t.Traverse()
-	tCount := 0
-	t.TraverseFunc(func(tn *tree.TN) {
-		tCount++
-	})
-	fmt.Printf("t count:%d", tCount)
+	//tCount := 0
+	//t.TraverseFunc(func(tn *tree.TN) {
+	//	tCount++
+	//})
+	//fmt.Printf("t count:%d", tCount)
 	////var mt myTreeNode
 	////mt.node = &t
 	////mt.MyTraverse()
 	//
-	//channel := t.TraverseWithChannel()
-	//maxNode := 0
-	//for c := range channel {
-	//	if maxNode < c.Value {
-	//		maxNode = c.Value
-	//	}
-	//}
-	//fmt.Println("\nMax node value：", maxNode)
+	channel := t.TraverseWithChannel()
+	maxNode := 0
+	for c := range channel {
+		if maxNode < c.Value {
+			maxNode = c.Value
+		}
+	}
+	fmt.Println("\nMax node value：", maxNode)
 
 }
 
