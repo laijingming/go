@@ -33,12 +33,12 @@ func generator() chan int {
 }
 func main() {
 	//c1, c2 := generator(), generator()
-	//for  {
+	//for {
 	//	select {
 	//	case n := <-c1:
-	//		fmt.Println("Received from c1:",n)
+	//		fmt.Println("Received from c1:", n)
 	//	case n := <-c2:
-	//		fmt.Println("Received from c1:",n)
+	//		fmt.Println("Received from c2:", n)
 	//
 	//	}
 	//}

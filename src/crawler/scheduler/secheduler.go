@@ -1,6 +1,6 @@
 package scheduler
 
-import "study/crawler/engine"
+import "crawler/engine"
 
 type SimpleScheduler struct {
 }
