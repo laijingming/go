@@ -10,11 +10,14 @@ import (
 type PostStruct struct {
 	url      string
 	paramStr string
+	method   string
+	header   http.Header
 }
 
 func (ps PostStruct) basePost() (*http.Response, error) {
-	req, _ := http.NewRequest(http.MethodPost, ps.url, strings.NewReader(ps.paramStr))
-	req.Header.Set("Content-Type", "application/json")
+	req, _ := http.NewRequest(ps.method, ps.url, strings.NewReader(ps.paramStr))
+	req.Header = ps.header
+	//req.Header.Set("Content-Type", "application/json")
 	client := http.Client{}
 	return client.Do(req)
 }
@@ -22,16 +25,14 @@ func (ps PostStruct) basePost() (*http.Response, error) {
 //HttpPostUnmarshal json.Unmarshal进行解码
 //执行时常90.18ms
 func (ps PostStruct) httpPostUnmarshal() (interface{}, error) {
+	var result interface{}
 	resp, _ := ps.basePost()
 	//此处request是http请求得到的json格式数据-》然后转化为【】byte格式数据
 	resJson, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		panic(err)
+	if err == nil {
+		data := []byte(string(resJson))
+		err = json.Unmarshal(data, &result)
 	}
-	var result interface{}
-	data := []byte(string(resJson))
-	err = json.Unmarshal(data, &result)
-
 	return result, err
 }
 
