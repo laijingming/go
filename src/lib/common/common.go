@@ -2,43 +2,51 @@ package common
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strings"
+	"time"
 )
 
 type PostStruct struct {
-	url      string
-	paramStr string
-	method   string
-	header   http.Header
+	Url      string
+	ParamStr string
+	Method   string
+	Header   http.Header
 }
 
 func (ps PostStruct) basePost() (*http.Response, error) {
-	req, _ := http.NewRequest(ps.method, ps.url, strings.NewReader(ps.paramStr))
-	req.Header = ps.header
+
+	req, _ := http.NewRequest(ps.Method, ps.Url, strings.NewReader(ps.ParamStr))
+	req.Header = ps.Header
 	//req.Header.Set("Content-Type", "application/json")
 	client := http.Client{}
 	return client.Do(req)
 }
 
 //HttpPostUnmarshal json.Unmarshal进行解码
-//执行时常90.18ms
-func (ps PostStruct) httpPostUnmarshal() (interface{}, error) {
+//执行时常 63.225648ms
+func (ps PostStruct) HttpPostUnmarshal() (interface{}, error) {
 	var result interface{}
 	resp, _ := ps.basePost()
 	//此处request是http请求得到的json格式数据-》然后转化为【】byte格式数据
-	resJson, err := ioutil.ReadAll(resp.Body)
+	resByte, err := ioutil.ReadAll(resp.Body)
+	resJson := string(resByte)
+	index := strings.Index(resJson, "<pre>")
+	if index != -1 {
+		resJson = resJson[0:index]
+	}
 	if err == nil {
-		data := []byte(string(resJson))
+		data := []byte(resJson)
 		err = json.Unmarshal(data, &result)
 	}
 	return result, err
 }
 
 //HttpPostNewDecoder json.NewDecoder解码
-//执行时常58.8713ms
-func (ps PostStruct) httpPostNewDecoder() (interface{}, error) {
+//执行时常63.116348ms
+func (ps PostStruct) HttpPostNewDecoder() (interface{}, error) {
 	resp, _ := ps.basePost()
 	var result interface{}
 	err := json.NewDecoder(resp.Body).Decode(&result)
@@ -55,3 +63,38 @@ func (ps PostStruct) httpPostNewDecoder() (interface{}, error) {
 1、json.NewDecoder用于http连接与socket连接的读取与写入，或者文件读取；
 2、json.Unmarshal用于直接是byte的输入。
 */
+
+type TimeStruct struct {
+	Time time.Time
+}
+
+//CalculateTime 保存时间
+func (t *TimeStruct) CalculateTime() {
+	t.Time = time.Now()
+}
+
+//SliceTime 计算时间差
+func (t *TimeStruct) SliceTime() time.Duration {
+	since := time.Since(t.Time)
+	t.Time = time.Now()
+	return since
+}
+
+//PrintSliceTime 输出时间差
+func (t *TimeStruct) PrintSliceTime() {
+	fmt.Println(t.SliceTime())
+}
+
+type ChanStruct struct {
+	CFun func(chan interface{})
+	WNum int
+}
+
+//CreateWorker 创建协程
+func CreateWorker(cs ChanStruct) chan interface{} {
+	c := make(chan interface{})
+	for i := cs.WNum; i > 0; i-- {
+		go cs.CFun(c)
+	}
+	return c
+}
