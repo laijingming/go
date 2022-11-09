@@ -1,0 +1,3 @@
+svn st 
+
+svn revert 
