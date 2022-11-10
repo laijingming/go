@@ -1,8 +1,8 @@
 package zhenai
 
 import (
+	"crawler/engine"
 	"regexp"
-	"study/crawler/engine"
 )
 
 const cityRe = `<a href="(http://album.zhenai.com/u/[0-9]+)"[^>]*>([^>]+)</a>`

@@ -1,8 +1,8 @@
 package engine
 
 import (
+	"crawler/fetch"
 	"log"
-	"study/crawler/fetch"
 )
 
 func Run(seeds ...Request) {

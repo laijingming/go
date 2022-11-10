@@ -1,8 +1,8 @@
 package zhenai
 
 import (
+	"crawler/engine"
 	"regexp"
-	"study/crawler/engine"
 )
 
 var profileRe = regexp.MustCompile(`<div[^(class)]+class="m-btn[^"]+"[^>]+>([^<]+)</div>`)
