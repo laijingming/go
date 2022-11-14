@@ -106,7 +106,7 @@ func walk(maze [][]int, star, end point) [][]int {
 }
 
 func main() {
-	maze := readMaze("maze/maze.in")
+	maze := readMaze("./src/maze/maze.in")
 	for _, row := range maze {
 		for _, col := range row {
 			fmt.Printf("%3d ", col)
@@ -114,7 +114,7 @@ func main() {
 		fmt.Println()
 	}
 	star := point{0, 0}
-	end := point{0, 0}
+	end := point{5, 4}
 	step := walk(maze, star, end)
 	for _, row := range step {
 		for _, col := range row {

@@ -1,23 +1,42 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 func main() {
 	//行 列
-	mapArr := [][]int{
-		{0, -1, 0, 0, 0},
-		{0, 0, 0, -1, 0},
-		{0, -1, 0, -1, 0},
-		{-1, -1, -1, 0, 0},
-		{0, -1, 0, 0, -1},
-		{0, -1, 0, 0, 0},
-	}
-	getStepCount(mapArr, 1, 2, 0, 1)
+	mapArr := readFile()
+	printMap(mapArr)
+	getStepCount(mapArr, 0, 0, 5, 4)
 	printMap(mapArr)
 }
+
+func readFile() [][]int {
+	open, err := os.Open("./src/crawler/maze/maze.in")
+	if err != nil {
+		panic(err)
+	}
+	var row, col int
+	fmt.Fscanf(open, "%d %d", &row, &col) //注意换行符调整成\r，不然会读到0，windows下换行符为\r\n
+	fmt.Println(row, col)
+	maze := make([][]int, row)
+	for i := range maze {
+		maze[i] = make([]int, col)
+		for j := range maze[i] {
+			fmt.Fscanf(open, "%d", &maze[i][j])
+		}
+	}
+	return maze
+}
+
 func printMap(mapArr [][]int) {
-	for _, v := range mapArr {
-		fmt.Println(v)
+	for _, row := range mapArr {
+		for _, col := range row {
+			fmt.Printf("%3d", col)
+		}
+		fmt.Println()
 	}
 }
 func getStepCount(mapArr [][]int, x int, y int, eX int, eY int) {
@@ -40,7 +59,9 @@ func getStepCount(mapArr [][]int, x int, y int, eX int, eY int) {
 		{x, y},
 	}
 	var step = 0
+	i := 0
 	for len(points) > 0 {
+		i++
 		px, py := points[0][0], points[0][1]
 		points = points[1:]
 		if px == eX && py == eY { //终点
@@ -65,5 +86,6 @@ func getStepCount(mapArr [][]int, x int, y int, eX int, eY int) {
 			points = append(points, []int{px, py + 1})
 		}
 	}
+	fmt.Println(i)
 	//mapArr[x][y] = 0
 }
