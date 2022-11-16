@@ -3,12 +3,9 @@ package fetch
 import (
 	"bufio"
 	"fmt"
-	"golang.org/x/net/html/charset"
 	"golang.org/x/text/encoding"
-	"golang.org/x/text/encoding/unicode"
 	"golang.org/x/text/transform"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strings"
 )
@@ -37,11 +34,13 @@ func Fetch(url string) ([]byte, error) {
 }
 
 func determineEncoding(r *bufio.Reader) encoding.Encoding {
-	bytes, err := r.Peek(1024)
-	if err != nil {
-		log.Printf("Fethc error:%v", err)
-		return unicode.UTF8
-	}
-	e, _, _ := charset.DetermineEncoding(bytes, "")
-	return e
+	//bytes, err := r.Peek(1024)
+	//if err != nil {
+	//	log.Printf("Fethc error:%v", err)
+	//return unicode.UTF8
+	//return nil
+	//}
+	//e, _, _ := charset.DetermineEncoding(bytes, "")
+	//return e
+	return nil
 }

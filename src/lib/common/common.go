@@ -3,8 +3,10 @@ package common
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 )
@@ -97,4 +99,63 @@ func CreateWorker(cs ChanStruct) chan interface{} {
 		go cs.CFun(c)
 	}
 	return c
+}
+
+//HttpGet 基础get请求
+func HttpGet(url string) []byte {
+	if strings.Index(url, "https") == -1 {
+		url = strings.Replace(url, "http", "https", 1)
+	}
+	request, _ := http.NewRequest(http.MethodGet, url, nil)
+	request.Header.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36")
+	request.Header.Add("cookie", "sid=14f7b3a6-2efd-4bb9-bdee-b59d40a974f1; ec=rPr4ZFqN-1631082127157-a9662a3bbd7b3-666224740; Hm_lvt_2c8ad67df9e787ad29dbd54ee608f5d2=1668415549; hccesp_lttk=AAAAAgAAAAAAAAAFAAAAAQAAAAeBwwi0wpEfjAVEAd2OIgKgWhPcfOHSVjvgoSJ3HeqF0QAAAAAAAAAAAAAAQHuCWxyd3QUuIz9Koo5pWAoLEU7Bl5VDEtcn/hqylJ6rNGYfFCKkrqelJ3+DzLwb5vuN76fJIQecpuKhmqSOkOE=; FSSBBIl1UgzbN7NO=5cywccPaKuutAeBVB4yzslilgYzrjGijwFPBeG5K5SLfxf7M6mOKN8LPai0ox180DDmREARRX1.90xMSker1n1G; hcbm_tk=MjZvkSuwF9k49wWeq8hF3nE0yS5XhXRnME7swrXaN/PnRNl/GKtUgjby8sffl00Q0Jl/fGD6Bv3fCMFiJxqfvJPI8AW128i/EkRxTyRWA+1ka9cyNolYelpYji9NAXz2otN2fjKK77TscE4s5mt7L27r1QxOIepMEhXvYDiCCGEElymWW7R2/vnIk3KLbmGkCY0hQumPk5FTlI4yeawODwVTXh0GUJo/OydLuScdvCESbMS7kg6+wVeyj6CoTT+7Lggz75qVfLEDSnfszV3oQuqb9HSM+QmF5065nUJULdd+HD9zWqekwPDpW72aonLORdLz7g5whq38UWVgF5HR+WqftHFNXGQzWE1ZRwe43Xvc47axwaV80YeBzLitkrvwEDd2zoiP75awPzZt4/npScnK0O1CYbsPIGDKNqzWzQ==_RERXV4AmIa4VjY7e; FSSBBIl1UgzbN7NP=5361siDJ09ulqqqDlITZYQAfUuiIa1mgnI9._Mxt9DM2HHuMaVv6ZIZU1frhGMKwroXHWmWZGIyK54Rv9EcbaR_Ew0ZRy7ZQzCoMQXm0FTZGgY1z7solyY02yOvYB5qiYtrTm4ZcAX_lJoavpDB97ZtPDM2aFqldlKNN1ulVDOkHrfK2GlWRWqnNaHloHP1bXv1z3ehUH.913rc3xiY5qfnyIfW65qTtBmTWh0VnBhK5V_tl3rO8vRr2aC_si6D2J9; Hm_lpvt_2c8ad67df9e787ad29dbd54ee608f5d2=1668584242; _efmdata=dyY8qPJvZQjO4CreY%2FTLLk42f4COphOi34kNpyobU12eSzK62Musuq0WGynAhTPLGv6S%2Bvm74cQIHTXIF2noCMNAlRyVcy3re%2BqrrfrDl1E%3D; _exid=Iv%2Fhiboc4nYawAIlaW8YDSlva7KCDCm3n2JQ8LJPsUn9baVJzsPsjysH7OrCFzy5MfPfmU1UW2%2FVhkiZV%2Bgeeg%3D%3D")
+	client := http.Client{}
+	response, err := client.Do(request)
+	if err != nil {
+		panic(err)
+	}
+	defer response.Body.Close()
+	//DumpResponse头部一起返回
+	//httputil.DumpResponse(response, true)
+	if response.StatusCode != http.StatusOK {
+		fmt.Printf("wrong status code:%d %s\n", response.StatusCode, url)
+		return nil
+	}
+	bytes, err := io.ReadAll(response.Body)
+	if err != nil {
+		panic(err)
+	}
+	return bytes
+}
+
+const baseDir = "./src/"
+
+func ReadFile(name string) []byte {
+	file, err := os.ReadFile(baseDir + name)
+	if err != nil {
+		return nil
+	}
+	return file
+}
+
+func WriteFile(name string, contents []byte) {
+	err := os.WriteFile(baseDir+name, contents, 0666)
+	if err != nil {
+		panic(err)
+	}
+
+}
+
+type CrawlerRequestStruct struct {
+	url       string
+	ParserFun func([]byte) CrawlerParserResultStruct
+}
+
+type CrawlerParserResultStruct struct {
+	requests []CrawlerRequestStruct
+	items    []interface{}
+}
+
+func CrawlerRun(CRS CrawlerRequestStruct) {
+
 }
