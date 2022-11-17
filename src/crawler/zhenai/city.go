@@ -18,10 +18,10 @@ func ParserCity(contents []byte) engine.ParseResult {
 	for _, sm := range subMatch {
 		name := string(sm[2])
 		result.Items = append(result.Items, "User:"+name)
-		result.Requests = append(result.Requests,
-			engine.Request{Url: string(sm[1]), ParserFun: func(bytes []byte) engine.ParseResult {
-				return ParserProfile(bytes, name)
-			}})
+		//result.Requests = append(result.Requests,
+		//	engine.Request{Url: string(sm[1]), ParserFun: func(bytes []byte) engine.ParseResult {
+		//		return ParserProfile(bytes, name)
+		//	}})
 	}
 	return result
 }

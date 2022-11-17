@@ -9,7 +9,6 @@ func Run(seeds ...Request) {
 	for len(seeds) > 0 {
 		request := seeds[0]
 		seeds = seeds[1:]
-		log.Printf("Fetching %v", request.Url)
 		result, err := worker(request)
 		if err != nil {
 			continue

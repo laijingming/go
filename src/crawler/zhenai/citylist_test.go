@@ -25,10 +25,10 @@ func BenchmarkParserCityList(b *testing.B) {
 	if err != nil {
 		panic(err)
 	}
-	const citySize = 470
+	const citySize = 12
 	for i := 0; i < b.N; i++ {
 		list := ParserCityList(bytes)
-		if len(list.Requests) != 470 {
+		if len(list.Requests) != 12 {
 			b.Errorf("result should have %d requests;but had %d", citySize, len(list.Requests))
 		}
 	}
