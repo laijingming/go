@@ -5,7 +5,9 @@ import (
 	"log"
 )
 
-func Run(seeds ...Request) {
+type SimpleEngine struct{}
+
+func (e SimpleEngine) Run(seeds ...Request) {
 	for len(seeds) > 0 {
 		request := seeds[0]
 		seeds = seeds[1:]

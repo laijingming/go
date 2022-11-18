@@ -3,12 +3,15 @@ package main
 import (
 	"crawler/engine"
 	"crawler/zhenai"
+	"fmt"
 	_ "golang.org/x/text/encoding/simplifiedchinese"
+	"runtime"
 )
 
 func main() {
-	//engine.Run(engine.Request{
-	engine.MultiRun(engine.Request{
+	fmt.Println(runtime.NumGoroutine())
+	return
+	engine.SimpleEngine{}.Run(engine.Request{
 		"https://www.zhenai.com/zhenghun",
 		zhenai.ParserCityList,
 	})
