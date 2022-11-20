@@ -20,6 +20,7 @@ M  |thread线程
 面对之前调度器的问题，Go 设计了新的调度器。
 
 在新调度器中，出列 M (thread) 和 G (goroutine)，又引进了 P (Processor)。
+
 <img width="770px" height="575.02px" src="https://www.topgoer.com/static/7.1/gmp/12.jpg" alt="">
 
 - 全局队列（Global Queue），存放等待运行的G。
