@@ -11,9 +11,13 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 )
 
+var tk = time.Tick(time.Microsecond * 1000)
+
 func Fetch(url string) ([]byte, error) {
+	<-tk
 	if strings.Index(url, "https") == -1 {
 		url = strings.Replace(url, "http", "https", 1)
 	}

@@ -2,6 +2,7 @@ package main
 
 import (
 	"crawler/engine"
+	"crawler/scheduler"
 	"crawler/zhenai"
 )
 
@@ -10,9 +11,13 @@ func main() {
 	//	"https://www.zhenai.com/zhenghun",
 	//	zhenai.ParserCityList,
 	//})
-	engine.MultiRun(engine.Request{
-		"https://www.zhenai.com/zhenghun",
-		zhenai.ParserCityList,
+
+	engine.ConcurrentEngine{
+		Scheduler:   &scheduler.SimpleScheduler{},
+		WorkerCount: 100,
+	}.Run(engine.Request{
+		Url:       "https://www.zhenai.com/zhenghun",
+		ParserFun: zhenai.ParserCityList,
 	})
 
 	//bytes, err := ioutil.ReadFile("crawler/zhenai/user.html")

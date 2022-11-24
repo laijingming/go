@@ -2,7 +2,6 @@ package engine
 
 import (
 	"fmt"
-	"log"
 )
 
 func MultiRun(seeds ...Request) {
@@ -16,6 +15,8 @@ func MultiRun(seeds ...Request) {
 		in <- seed
 	}
 
+	itemNum := 0
+
 	for {
 		result := <-out
 		fmt.Println(len(result.Requests))
@@ -26,7 +27,8 @@ func MultiRun(seeds ...Request) {
 			}(r)
 		}
 		for _, item := range result.Items {
-			log.Printf("Got item %v", item)
+			itemNum++
+			fmt.Printf("Got %d item:%v\n", itemNum, item)
 		}
 	}
 	fmt.Println("done")

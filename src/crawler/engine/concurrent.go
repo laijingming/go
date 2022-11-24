@@ -9,24 +9,29 @@ type ConcurrentEngine struct {
 
 type Scheduler interface {
 	Submit(Request)
+	SetChan(chan Request)
+	ReturnChan() chan Request
 }
 
 func (e ConcurrentEngine) Run(seeds ...Request) {
-	for _, r := range seeds {
-		e.Scheduler.Submit(r)
-	}
 	in := make(chan Request)
 	out := make(chan ParseResult)
+	e.Scheduler.SetChan(in)
 	for i := 0; i < e.WorkerCount; i++ {
 		createWorker(in, out)
 	}
+	for _, r := range seeds {
+		e.Scheduler.Submit(r)
+	}
+	itemNum := 0
 	for {
 		result := <-out
-		for _, item := range result.Items {
-			fmt.Printf("Got item:%v", item)
+		for _, r := range result.Requests {
+			e.Scheduler.Submit(r)
 		}
-		for _, request := range result.Requests {
-			e.Scheduler.Submit(request)
+		for _, item := range result.Items {
+			itemNum++
+			fmt.Printf("Got %d item:%v\n", itemNum, item)
 		}
 	}
 }
