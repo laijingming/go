@@ -2,6 +2,7 @@ package main
 
 import (
 	"crawler/engine"
+	"crawler/persist"
 	"crawler/scheduler"
 	"crawler/zhenai"
 )
@@ -11,11 +12,12 @@ func main() {
 	//	"https://www.zhenai.com/zhenghun",
 	//	zhenai.ParserCityList,
 	//})
-
-	engine.ConcurrentEngine{
-		Scheduler:   &scheduler.SimpleScheduler{},
+	e := &engine.ConcurrentEngine{
+		Scheduler:   &scheduler.QueuedScheduler{},
 		WorkerCount: 100,
-	}.Run(engine.Request{
+		ItemChan:    persist.Save(),
+	}
+	e.Run(engine.Request{
 		Url:       "https://www.zhenai.com/zhenghun",
 		ParserFun: zhenai.ParserCityList,
 	})
