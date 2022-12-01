@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"lib/common"
-	"net/http"
 	"sync"
 	"time"
 )
@@ -16,7 +15,6 @@ func main() {
 		ParamStr: `{"huodong2":{"hd3063Create":{"name":"队1"}}}`,
 		//ParamStr: `{"huodong2":{"hd3063Create":{"name":"测试"}}}`,
 		//ParamStr: `{"huodong2":{"hd3063Info":{"name":"测试"}}}`,
-		Method: http.MethodPost,
 		Header: map[string][]string{
 			"Content-Type": {"application/json"},
 		},

@@ -11,16 +11,30 @@ import (
 	"time"
 )
 
-type PostStruct struct {
+type HttpStruct struct {
 	Url      string
 	ParamStr string
 	Method   string
 	Header   http.Header
 }
 
+func (ps *HttpStruct) HttpBase() (*http.Response, error) {
+	req, _ := http.NewRequest(ps.Method, ps.Url, strings.NewReader(ps.ParamStr))
+	req.Header = ps.Header
+	//req.Header.Set("Content-Type", "application/json")
+	client := http.Client{}
+	return client.Do(req)
+}
+
+type PostStruct struct {
+	Url      string
+	ParamStr string
+	Header   http.Header
+}
+
 func (ps PostStruct) basePost() (*http.Response, error) {
 
-	req, _ := http.NewRequest(ps.Method, ps.Url, strings.NewReader(ps.ParamStr))
+	req, _ := http.NewRequest(http.MethodPost, ps.Url, strings.NewReader(ps.ParamStr))
 	req.Header = ps.Header
 	//req.Header.Set("Content-Type", "application/json")
 	client := http.Client{}

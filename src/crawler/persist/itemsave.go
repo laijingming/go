@@ -1,6 +1,9 @@
 package persist
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 func Save() chan interface{} {
 	out := make(chan interface{})
@@ -8,6 +11,8 @@ func Save() chan interface{} {
 	go func() {
 		for {
 			item := <-out
+			strArr := strings.Split(item.(string), ":")
+			fmt.Println(strArr)
 			fmt.Printf("Got %d item:%v\n", itemNum, item)
 			itemNum++
 		}
