@@ -15,7 +15,7 @@ func main() {
 	e := &engine.ConcurrentEngine{
 		Scheduler:   &scheduler.QueuedScheduler{},
 		WorkerCount: 100,
-		ItemChan:    persist.Save(),
+		ItemChan:    persist.ItemSaver(),
 	}
 	e.Run(engine.Request{
 		Url:       "https://www.zhenai.com/zhenghun",
