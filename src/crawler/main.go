@@ -1,10 +1,9 @@
 package main
 
 import (
-	"crawler/engine"
-	"crawler/persist"
-	"crawler/scheduler"
-	"crawler/zhenai"
+	"context"
+	"github.com/elastic/go-elasticsearch"
+	"github.com/olivere/elastic"
 )
 
 func main() {
@@ -12,19 +11,46 @@ func main() {
 	//	"https://www.zhenai.com/zhenghun",
 	//	zhenai.ParserCityList,
 	//})
-	e := &engine.ConcurrentEngine{
-		Scheduler:   &scheduler.QueuedScheduler{},
-		WorkerCount: 100,
-		ItemChan:    persist.ItemSaver(),
-	}
-	e.Run(engine.Request{
-		Url:       "https://www.zhenai.com/zhenghun",
-		ParserFun: zhenai.ParserCityList,
-	})
-
-	//bytes, err := ioutil.ReadFile("crawler/zhenai/user.html")
-	//if err!=nil {
-	//	panic(err)
+	//e := &engine.ConcurrentEngine{
+	//	Scheduler:   &scheduler.QueuedScheduler{},
+	//	WorkerCount: 100,
+	//	ItemChan:    persist.ItemSaver(),
 	//}
-	//zhenai.ParserProfile(bytes)
+	//e.Run(engine.Request{
+	//	Url:       "https://www.zhenai.com/zhenghun",
+	//	ParserFun: zhenai.ParserCityList,
+	//})
+
+	testElastic()
+}
+
+func testElastic() {
+	initEsClient()
+	es.Index()
+}
+
+func Upsert(ctx context.Context, index, id string, doc interface{}) {
+
+}
+
+var esOli *elastic.Client
+var es *elasticsearch.Client
+
+func initEsOliClient() {
+	var err error
+	esOli, err = elastic.NewClient(elastic.SetSniff(false), elastic.SetURL("http://localhost:9200"))
+	if err != nil {
+		panic(err)
+	}
+}
+func initEsClient() {
+	var err error
+	es, err = elasticsearch.NewClient(elasticsearch.Config{
+		Addresses: []string{
+			"http://localhost:9200",
+		},
+	})
+	if err != nil {
+		panic(err)
+	}
 }

@@ -22,13 +22,14 @@ func ItemSaver() chan interface{} {
 
 func save(item interface{}) {
 	es, err := elasticsearch.NewClient(elasticsearch.Config{
-		Addresses: []string{"http://localhost:9200"},
+		Addresses: []string{
+			"http://localhost:9200",
+		},
 	})
 	if err != nil {
 		return
 	}
 	strArr := strings.Split(item.(string), ":")
 	if strArr[0] == "User" {
-		es.Index
 	}
 }
