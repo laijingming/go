@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"github.com/elastic/go-elasticsearch"
+	"fmt"
 	"github.com/olivere/elastic"
 )
 
@@ -25,31 +25,38 @@ func main() {
 }
 
 func testElastic() {
-	initEsClient()
-	es.Index()
+	var es elasticStruct
+	u := `{"name":"wunder", "age": 1}`
+	es.initClient()
+	es.create("aj407", "1", u)
+
 }
 
-func Upsert(ctx context.Context, index, id string, doc interface{}) {
-
+type elasticStruct struct {
+	client *elastic.Client
+}
+type user struct {
+	name string
+	age  int
 }
 
-var esOli *elastic.Client
-var es *elasticsearch.Client
+func (es *elasticStruct) create(index string, id string, doc interface{}) {
 
-func initEsOliClient() {
-	var err error
-	esOli, err = elastic.NewClient(elastic.SetSniff(false), elastic.SetURL("http://localhost:9200"))
+	res, err := es.client.Index().
+		Index(index).  // 索引名称
+		Id(id).        // 指定文档id
+		BodyJson(doc). // 可序列化JSON
+		Do(context.Background())
+
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println(res)
+
 }
-func initEsClient() {
+func (es *elasticStruct) initClient() {
 	var err error
-	es, err = elasticsearch.NewClient(elasticsearch.Config{
-		Addresses: []string{
-			"http://localhost:9200",
-		},
-	})
+	es.client, err = elastic.NewClient(elastic.SetSniff(false), elastic.SetURL("http://localhost:9200"))
 	if err != nil {
 		panic(err)
 	}

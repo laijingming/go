@@ -21,7 +21,7 @@ func ItemSaver() chan interface{} {
 }
 
 func save(item interface{}) {
-	es, err := elasticsearch.NewClient(elasticsearch.Config{
+	_, err := elasticsearch.NewClient(elasticsearch.Config{
 		Addresses: []string{
 			"http://localhost:9200",
 		},
