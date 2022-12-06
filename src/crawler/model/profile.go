@@ -13,3 +13,9 @@ type Profile struct {
 	House      string
 	Car        string
 }
+
+type User struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
+	Url  string `json:"url"`
+}

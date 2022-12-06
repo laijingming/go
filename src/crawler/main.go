@@ -2,46 +2,43 @@ package main
 
 import (
 	"context"
+	"crawler/engine"
+	"crawler/persist"
+	"crawler/scheduler"
+	"crawler/zhenai"
 	"fmt"
 	"github.com/olivere/elastic"
 )
 
 func main() {
+
 	//engine.SimpleEngine{}.Run(engine.Request{
 	//	"https://www.zhenai.com/zhenghun",
 	//	zhenai.ParserCityList,
 	//})
-	//e := &engine.ConcurrentEngine{
-	//	Scheduler:   &scheduler.QueuedScheduler{},
-	//	WorkerCount: 100,
-	//	ItemChan:    persist.ItemSaver(),
-	//}
-	//e.Run(engine.Request{
-	//	Url:       "https://www.zhenai.com/zhenghun",
-	//	ParserFun: zhenai.ParserCityList,
+	e := &engine.ConcurrentEngine{
+		Scheduler:   &scheduler.QueuedScheduler{},
+		WorkerCount: 100,
+		ItemChan:    persist.ItemSaver(),
+	}
+	e.Run(engine.Request{
+		Url:       "https://www.zhenai.com/zhenghun",
+		ParserFun: zhenai.ParserCityList,
+	})
+
+	//e := InitElastic()
+	//e.create("aj407", "1", User{
+	//	Name: "test",
+	//	Id:   "1",
 	//})
-
-	testElastic()
 }
 
-func testElastic() {
-	var es elasticStruct
-	u := `{"name":"wunder", "age": 1}`
-	es.initClient()
-	es.create("aj407", "1", u)
-
-}
-
-type elasticStruct struct {
-	client *elastic.Client
-}
-type user struct {
-	name string
-	age  int
+type User struct {
+	Name string `json:"name"`
+	Id   string `json:"id"`
 }
 
 func (es *elasticStruct) create(index string, id string, doc interface{}) {
-
 	res, err := es.client.Index().
 		Index(index).  // 索引名称
 		Id(id).        // 指定文档id
@@ -54,10 +51,23 @@ func (es *elasticStruct) create(index string, id string, doc interface{}) {
 	fmt.Println(res)
 
 }
-func (es *elasticStruct) initClient() {
+
+type elasticStruct struct {
+	client *elastic.Client
+}
+
+var client elasticStruct
+
+func InitElastic() *elasticStruct {
+	if client.client != nil {
+		return &client
+	}
+	e := elasticStruct{}
 	var err error
-	es.client, err = elastic.NewClient(elastic.SetSniff(false), elastic.SetURL("http://localhost:9200"))
+	e.client, err = elastic.NewClient(elastic.SetSniff(false), elastic.SetURL("http://localhost:9200"))
 	if err != nil {
 		panic(err)
 	}
+	client = e
+	return &e
 }

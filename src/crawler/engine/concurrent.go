@@ -1,9 +1,11 @@
 package engine
 
+import "crawler/model"
+
 type ConcurrentEngine struct {
 	Scheduler   Scheduler
 	WorkerCount int
-	ItemChan    chan interface{}
+	ItemChan    chan model.User
 }
 
 type Scheduler interface {
@@ -30,7 +32,7 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 		for _, item := range result.Items {
 			//itemNum++
 			//fmt.Printf("Got %d item:%v\n", itemNum, item)
-			go func(item interface{}) { e.ItemChan <- item }(item)
+			go func(item model.User) { e.ItemChan <- item }(item)
 		}
 	}
 }

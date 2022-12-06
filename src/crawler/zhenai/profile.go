@@ -32,7 +32,7 @@ func ParserProfile(contents []byte, name string) engine.ParseResult {
 	//info.Name=string(nikeName[1])
 	//info.Gender=string(gender[1])
 	result := engine.ParseResult{}
-	result.Items = append(result.Items, infoTemp)
+	//result.Items = append(result.Items, infoTemp)
 	return result
 
 }

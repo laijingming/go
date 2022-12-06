@@ -1,35 +1,65 @@
 package persist
 
 import (
+	"context"
+	"crawler/model"
 	"fmt"
-	"github.com/elastic/go-elasticsearch"
-	"strings"
+	"github.com/olivere/elastic"
 )
 
-func ItemSaver() chan interface{} {
-	out := make(chan interface{})
-	itemNum := 0
+type ElasticStruct struct {
+	client *elastic.Client
+}
+
+func ItemSaver() chan model.User {
+	out := make(chan model.User)
+	es := InitElastic()
 	go func() {
 		for {
-			item := <-out
-			fmt.Printf("Got %d item:%v\n", itemNum, item)
-			itemNum++
-			save(item)
+			user := <-out
+			es.save("user", user.Id, user)
+			fmt.Printf("Got save #%s item:%v\n", user.Id, user)
+
 		}
 	}()
 	return out
 }
 
-func save(item interface{}) {
-	_, err := elasticsearch.NewClient(elasticsearch.Config{
-		Addresses: []string{
-			"http://localhost:9200",
-		},
-	})
+func (es *ElasticStruct) save(index string, id string, doc interface{}) string {
+	res, err := es.client.Index().
+		Index(index).  // 索引名称
+		Id(id).        // 指定文档id
+		BodyJson(doc). // 可序列化JSON
+		Do(context.Background())
+
 	if err != nil {
-		return
+		return ""
 	}
-	strArr := strings.Split(item.(string), ":")
-	if strArr[0] == "User" {
+	return res.Id
+}
+
+func (es *ElasticStruct) get(index string, id string) *elastic.GetResult {
+	res, err := es.client.Get().
+		Index(index). // 索引名称
+		Id(id).       // 指定文档id
+		Do(context.Background())
+
+	if err != nil {
+		panic(err)
 	}
+	return res
+}
+
+func InitElastic() *ElasticStruct {
+	e := ElasticStruct{}
+	var err error
+	e.client, err = elastic.NewClient(
+		elastic.SetSniff(false),
+		//默认本地9200
+		//elastic.SetURL("http://localhost:9200"),
+	)
+	if err != nil {
+		panic(err)
+	}
+	return &e
 }

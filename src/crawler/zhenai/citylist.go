@@ -18,11 +18,10 @@ func ParserCityList(contents []byte) engine.ParseResult {
 	result := engine.ParseResult{}
 	subMatch := compile.FindAllSubmatch(contents, -1)
 	for _, sm := range subMatch {
-		tempUrl := string(sm[1])
-		result.Items = append(result.Items, "City:"+string(sm[2]))
+		//result.Items = append(result.Items, "City:"+string(sm[2]))
 		result.Requests = append(result.Requests,
-			engine.Request{Url: tempUrl, ParserFun: ParserCity})
-		//pageUrls := checkUrl(tempUrl)
+			engine.Request{Url: string(sm[1]), ParserFun: ParserCity})
+		//pageUrls := checkUrl(string(sm[1]))
 		//if len(pageUrls) > 0 {
 		//	for _, pageUrl := range pageUrls {
 		//		result.Requests = append(result.Requests,
