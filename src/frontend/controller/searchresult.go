@@ -56,8 +56,14 @@ func (h SearchResultHandle) getSearchResult(q string, from int) (model.SearchRes
 	if err != nil {
 		return page, err
 	}
+	page.Query = q
 	page.Hits = int(do.TotalHits())
 	page.Start = from
 	page.Items = do.Each(reflect.TypeOf(model2.User{}))
+	page.PrevFrom = from - len(page.Items)
+	page.NextFrom = from + len(page.Items)
+	if len(page.Items) == 0 {
+		page.NextFrom = 0
+	}
 	return page, nil
 }
