@@ -52,6 +52,7 @@ func (h SearchResultHandle) getSearchResult(q string, from int) (model.SearchRes
 	do, err := h.client.Search("user").
 		Query(elastic.NewQueryStringQuery(q)).
 		From(from).
+		Size(15).
 		Do(context.Background())
 	if err != nil {
 		return page, err
