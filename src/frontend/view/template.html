@@ -5,10 +5,26 @@
     <title>Title</title>
 </head>
 <body>
-{{.Start}}
-{{.Hits}}
+<form action="" method="get">
+    <input type="text" name="q" value="{{.Query}}">
+    <input type="submit" value="提交">
+</form>
+{{.Start}}<br>
+{{.Hits}}<br>
 {{range .Items}}
-       {{.Id}}、{{.Name}}、{{.Url}}<br>
+<table>
+    <tr>
+        <td>{{.Id}}</td>
+        <td>{{.Name}}</td>
+        <td>{{.Url}}</td>
+    </tr>
+</table>
 {{end}}
+<div style="align-content: center">
+    {{if ge .PrevFrom 0}}
+    <a href="search?q={{.Query}}&from={{.PrevFrom}}">上一页</a>
+    {{end}}
+    <a href="search?q={{.Query}}&from={{.NextFrom}}">下一页</a>
+</div>
 </body>
 </html>
