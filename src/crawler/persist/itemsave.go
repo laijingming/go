@@ -17,7 +17,7 @@ func ItemSaver() chan model.User {
 	go func() {
 		for {
 			user := <-out
-			es.save("user", user.Id, user)
+			es.Save("user", user.Id, user)
 			fmt.Printf("Got save #%s item:%v\n", user.Id, user)
 
 		}
@@ -25,7 +25,7 @@ func ItemSaver() chan model.User {
 	return out
 }
 
-func (es *ElasticStruct) save(index string, id string, doc interface{}) string {
+func (es *ElasticStruct) Save(index string, id string, doc interface{}) string {
 	res, err := es.client.Index().
 		Index(index).  // 索引名称
 		Id(id).        // 指定文档id
@@ -38,7 +38,7 @@ func (es *ElasticStruct) save(index string, id string, doc interface{}) string {
 	return res.Id
 }
 
-func (es *ElasticStruct) get(index string, id string) *elastic.GetResult {
+func (es *ElasticStruct) Get(index string, id string) *elastic.GetResult {
 	res, err := es.client.Get().
 		Index(index). // 索引名称
 		Id(id).       // 指定文档id
