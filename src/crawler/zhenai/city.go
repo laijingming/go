@@ -10,7 +10,7 @@ const cityRe = `<a href="(http://album.zhenai.com/u/[0-9]+)"[^>]*>([^>]+)</a>`
 
 var userIdRe = regexp.MustCompile(`http://album.zhenai.com/u/(\d+)`)
 
-func ParserCity(contents []byte) engine.ParseResult {
+func ParserCity(contents []byte, _ string) engine.ParseResult {
 	compile, err := regexp.Compile(cityRe)
 	if err != nil {
 		panic(err)

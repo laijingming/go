@@ -13,11 +13,11 @@ type ElasticStruct struct {
 
 func ItemSaver() chan model.User {
 	out := make(chan model.User)
-	es := InitElastic()
+	//es := InitElastic()
 	go func() {
 		for {
 			user := <-out
-			es.Save("user", user.Id, user)
+			//es.Save("user", user.Id, user)
 			fmt.Printf("Got save #%s item:%v\n", user.Id, user)
 
 		}

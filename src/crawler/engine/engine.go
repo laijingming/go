@@ -28,5 +28,5 @@ func worker(request Request) (ParseResult, error) {
 	if err != nil {
 		return ParseResult{}, err
 	}
-	return request.ParserFun(bytes), nil
+	return request.Parser.Parse(bytes, request.Url), nil
 }

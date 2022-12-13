@@ -22,8 +22,11 @@ func main() {
 		ItemChan:    persist.ItemSaver(),
 	}
 	e.Run(engine.Request{
-		Url:       "https://www.zhenai.com/zhenghun",
-		ParserFun: zhenai.ParserCityList,
+		Url: "https://www.zhenai.com/zhenghun",
+		Parser: &engine.NewFunParser{
+			Func: zhenai.ParserCityList,
+			Name: "ParserCityList",
+		},
 	})
 
 	//e := InitElastic()

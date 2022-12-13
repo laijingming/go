@@ -9,7 +9,7 @@ import (
 
 const cityListRe = `<a href="(http://www.zhenai.com/zhenghun/[0-9a-z]+)"[^>]*>([^<]+)</a>`
 
-func ParserCityList(contents []byte) engine.ParseResult {
+func ParserCityList(contents []byte, _ string) engine.ParseResult {
 	compile, err := regexp.Compile(cityListRe)
 	if err != nil {
 		panic(err)
@@ -20,7 +20,13 @@ func ParserCityList(contents []byte) engine.ParseResult {
 	for _, sm := range subMatch {
 		//result.Items = append(result.Items, "City:"+string(sm[2]))
 		result.Requests = append(result.Requests,
-			engine.Request{Url: string(sm[1]), ParserFun: ParserCity})
+			engine.Request{
+				Url: string(sm[1]),
+				Parser: &engine.NewFunParser{
+					Func: ParserCity,
+					Name: "ParserCity",
+				},
+			})
 		//pageUrls := checkUrl(string(sm[1]))
 		//if len(pageUrls) > 0 {
 		//	for _, pageUrl := range pageUrls {
