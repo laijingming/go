@@ -2,9 +2,14 @@ package engine
 
 import "crawler/model"
 
+type Parser interface {
+	Parser(contents []byte, url string) ParseResult
+	Serialize() (name string, args interface{})
+}
 type Request struct {
-	Url       string
-	ParserFun func([]byte) ParseResult
+	Url string
+	//ParserFun func([]byte) ParseResult
+	Parser Parser
 }
 
 type ParseResult struct {
