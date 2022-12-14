@@ -36,7 +36,7 @@ func MultiRun(seeds ...Request) {
 
 func createWorker2(in chan Request, out chan ParseResult) {
 	for r := range in {
-		result, err := worker(r)
+		result, err := Worker(r)
 		if err != nil {
 			continue
 		}

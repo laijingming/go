@@ -43,6 +43,8 @@ func checkUrl(baseUrl string) []string {
 	i := 1
 	for {
 		pageUrl := fmt.Sprintf(baseUrl+"/%d", i)
+		//这里加个请求超时断开连接，请求失败认定为已经是最后一页
+		//这样做是为了提高脚本运行效率
 		get, err := http.Get(pageUrl)
 		if err != nil {
 			panic(err)
