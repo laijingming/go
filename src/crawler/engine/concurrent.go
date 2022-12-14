@@ -3,11 +3,12 @@ package engine
 import "crawler/model"
 
 type ConcurrentEngine struct {
-	Scheduler   Scheduler
-	WorkerCount int
-	ItemChan    chan model.User
+	Scheduler        Scheduler
+	WorkerCount      int
+	ItemChan         chan model.User
+	RequestProcessor Processor
 }
-
+type Processor func(Request) (ParseResult, error)
 type Scheduler interface {
 	Submit(Request)
 	WorkerReady(chan Request)
@@ -18,7 +19,7 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 	out := make(chan ParseResult)
 	e.Scheduler.Run()
 	for i := 0; i < e.WorkerCount; i++ {
-		createWorker(out, e.Scheduler)
+		e.createWorker(out, e.Scheduler)
 	}
 	for _, r := range seeds {
 		e.Scheduler.Submit(r)
@@ -37,13 +38,13 @@ func (e *ConcurrentEngine) Run(seeds ...Request) {
 	}
 }
 
-func createWorker(out chan ParseResult, s Scheduler) {
+func (e *ConcurrentEngine) createWorker(out chan ParseResult, s Scheduler) {
 	in := make(chan Request)
 	go func() {
 		for {
 			s.WorkerReady(in)
 			request := <-in
-			result, err := Worker(request)
+			result, err := e.RequestProcessor(request)
 			if err != nil {
 				continue
 			}

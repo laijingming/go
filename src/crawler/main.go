@@ -17,9 +17,10 @@ func main() {
 	//	zhenai.ParserCityList,
 	//})
 	e := &engine.ConcurrentEngine{
-		Scheduler:   &scheduler.QueuedScheduler{},
-		WorkerCount: 100,
-		ItemChan:    persist.ItemSaver(),
+		Scheduler:        &scheduler.QueuedScheduler{},
+		WorkerCount:      100,
+		ItemChan:         persist.ItemSaver(),
+		RequestProcessor: engine.Worker,
 	}
 	e.Run(engine.Request{
 		Url: "https://www.zhenai.com/zhenghun",
@@ -29,11 +30,6 @@ func main() {
 		},
 	})
 
-	//e := InitElastic()
-	//e.create("aj407", "1", User{
-	//	Name: "test",
-	//	Id:   "1",
-	//})
 }
 
 type User struct {
@@ -43,8 +39,8 @@ type User struct {
 
 func (es *elasticStruct) create(index string, id string, doc interface{}) {
 	res, err := es.client.Index().
-		Index(index).  // 索引名称
-		Id(id).        // 指定文档id
+		Index(index). // 索引名称
+		Id(id). // 指定文档id
 		BodyJson(doc). // 可序列化JSON
 		Do(context.Background())
 
