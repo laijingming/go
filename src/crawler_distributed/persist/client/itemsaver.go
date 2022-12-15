@@ -1,14 +1,13 @@
 package itemsaver
 
 import (
-	"config"
 	"crawler/model"
 	"crawler_distributed/rpcsupport"
 	"fmt"
 )
 
-func ItemSaver() (chan model.User, error) {
-	client, err := rpcsupport.NewClient(fmt.Sprintf(":%d", config.ItemSaver0))
+func ItemSaver(host int) (chan model.User, error) {
+	client, err := rpcsupport.NewClient(fmt.Sprintf(":%d", host))
 	if err != nil {
 		return nil, err
 	}

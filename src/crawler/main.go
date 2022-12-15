@@ -1,6 +1,7 @@
 package main
 
 import (
+	"config"
 	"context"
 	"crawler/engine"
 	"crawler/persist"
@@ -23,7 +24,7 @@ func main() {
 		RequestProcessor: engine.Worker,
 	}
 	e.Run(engine.Request{
-		Url: "https://www.zhenai.com/zhenghun",
+		Url: config.ZAMainUrl,
 		Parser: &engine.NewFunParser{
 			Func: zhenai.ParserCityList,
 			Name: "ParserCityList",
@@ -39,8 +40,8 @@ type User struct {
 
 func (es *elasticStruct) create(index string, id string, doc interface{}) {
 	res, err := es.client.Index().
-		Index(index). // 索引名称
-		Id(id). // 指定文档id
+		Index(index).  // 索引名称
+		Id(id).        // 指定文档id
 		BodyJson(doc). // 可序列化JSON
 		Do(context.Background())
 

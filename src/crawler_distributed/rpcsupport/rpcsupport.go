@@ -14,6 +14,7 @@ func ServerRpc(host string, jsonRpc interface{}) error {
 		return err
 	} //监听1234端口
 	//{"method":"DemoService.Div","params":[{"A":3,"B":4}],"id":1}
+	log.Printf("listening on:%v\n", host)
 	for {
 		accept, err := listen.Accept()
 		if err != nil {

@@ -2,6 +2,7 @@ package fetch
 
 import (
 	"bufio"
+	"config"
 	"fmt"
 	"golang.org/x/net/html/charset"
 	"golang.org/x/text/encoding"
@@ -14,10 +15,10 @@ import (
 	"time"
 )
 
-var tk = time.Tick(time.Microsecond * 1000)
+var tk = time.Tick(time.Second / config.Qps)
 
 func Fetch(url string) ([]byte, error) {
-	//<-tk
+	<-tk
 	if strings.Index(url, "https") == -1 {
 		url = strings.Replace(url, "http", "https", 1)
 	}
